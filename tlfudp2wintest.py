@@ -98,7 +98,7 @@ def process_args():
     tlf_host = '127.0.0.1'
     tlf_port = 9873
     wt_host = '127.0.0.1'
-    wt_port = 9872
+    wt_port = 9871
 
     parser = argparse.ArgumentParser(description='TLF UDP to WinTest converter')
     parser.add_argument('-d', '--debug', action='store_true',
