@@ -24,7 +24,7 @@ class Qso:
     mode: str = ''
     rst_s: str = ''
     rst_r: str = ''
-    exhange: str = ''
+    exchange: str = ''
     seq: int = 0
     time: int = int(time.time())    # epoch seconds
 
