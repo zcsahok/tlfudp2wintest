@@ -1,3 +1,6 @@
+"""
+Convert TLF UDP QSO information to WinTest format
+"""
 
 import sys
 import argparse
@@ -10,6 +13,12 @@ from dataclasses import dataclass
 
 @dataclass
 class Qso:
+    """
+    QSO information
+    """
+
+    # pylint: disable=too-many-instance-attributes
+
     call: str = ''
     freq: float = 0
     mode: str = ''
@@ -108,7 +117,7 @@ def process_args():
     parser.add_argument('--tlf-port', metavar='PORT', type=int, default=tlf_port,
                     help=f'TLF node port (default: {tlf_port})')
     parser.add_argument('--wt-host', metavar='HOST', type=str, default=wt_host,
-                    help=f'WinTest destination host (default: {wt_host})')
+                    help=f'WinTest destination host/IP (default: {wt_host})')
     parser.add_argument('--wt-port', metavar='PORT', type=int, default=wt_port,
                     help=f'WinTest destination port (default: {wt_port})')
 
@@ -123,16 +132,15 @@ def process_args():
 
 args = process_args()
 
-log_level = logging.INFO
+LOG_LEVEL = logging.INFO
 if args.debug:
-    log_level = logging.DEBUG
+    LOG_LEVEL = logging.DEBUG
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=log_level)
-logging.info(f'Listening on {args.tlf_host}:{args.tlf_port}')
-logging.info(f'  Sending to {args.wt_host}:{args.wt_port}')
+logging.basicConfig(format='%(asctime)s %(message)s', level=LOG_LEVEL)
+logging.info('Listening on %s:%s', args.tlf_host, args.tlf_port)
+logging.info('  Sending to %s:%s', args.wt_host, args.wt_port)
 
 with socketserver.UDPServer((args.tlf_host, args.tlf_port), TlfUdpHandler) as server:
     # Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
     server.serve_forever()
-
