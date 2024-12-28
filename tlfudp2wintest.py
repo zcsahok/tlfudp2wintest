@@ -76,7 +76,6 @@ def build_wt_qso(qso):
 
 
 def send_wt_qso(qso):
-    global args
     line = build_wt_qso(qso)
     # add checksum
     data = line.encode('utf-8')
@@ -92,7 +91,7 @@ class TlfUdpHandler(socketserver.DatagramRequestHandler):
     def handle(self):
         ip = self.client_address[0]
         raw = self.rfile.readline().strip()
-        logging.info(f'*** {len(raw)} bytes from {ip}')
+        logging.info('*** %s bytes from %s', len(raw), ip)
         logging.debug(raw)
 
         data = raw.decode("utf-8")
