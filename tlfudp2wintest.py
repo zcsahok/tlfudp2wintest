@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Convert TLF UDP QSO information to WinTest format
 """
@@ -26,7 +27,7 @@ class Qso:
     rst_r: str = ''
     exchange: str = ''
     seq: int = 0
-    time: int = int(time.time())    # epoch seconds
+    time: int = 0   # epoch seconds
 
 
 #A1 40CW  14-Dec-24 08:10 0004  TE4ST          599  599  123                              |
@@ -43,6 +44,7 @@ def parse_tlf_qso(line):
 
     # fixme: parse time
     #result.time = ...
+    result.time = int(time.time())
 
     return result
 
@@ -63,15 +65,24 @@ def get_wt_band(freq):
     return 0
 
 
+def get_wt_mode(mode):
+    match mode:
+        case 'CW': return 0
+        case 'SSB': return 1
+        case 'DIG': return mode_dig
+
+    return 0
+
+
 def build_wt_qso(qso):
     f = int(qso.freq / 100)
-    mode = 0 if qso.mode == 'CW' else 1
+    mode = get_wt_mode(qso.mode)
     band = get_wt_band(qso.freq)
     return (
-        f'ADDQSO: "STN1" "" "STN1" {qso.time} {f} {mode}'
+        f'ADDQSO: "STN1" "" "{call}" {qso.time} {f} {mode}'
         f' {band} 0 0 0 {qso.seq} {qso.seq} "{qso.call}"'
         f' "{qso.rst_s}" "{qso.rst_r}{qso.exchange}"'
-        f' "" "" "" 0 "" "" "" 5'
+        f' "" "" "" 0 "" "" "{operator}" 5'
         )
 
 
@@ -119,6 +130,12 @@ def process_args():
                     help=f'WinTest destination host/IP (default: {wt_host})')
     parser.add_argument('--wt-port', metavar='PORT', type=int, default=wt_port,
                     help=f'WinTest destination port (default: {wt_port})')
+    parser.add_argument('--rtty', action='store_true',
+                    help='digital mode is RTTY')
+    parser.add_argument('--call', metavar='CALL', type=str, required = True,
+                    help='station callsign')
+    parser.add_argument('--op', metavar='OP', type=str,
+                    help='operator callsign or name (default: empty)')
 
     parsed_args, unparsed_args = parser.parse_known_args()
     if unparsed_args:
@@ -138,6 +155,17 @@ if args.debug:
 logging.basicConfig(format='%(asctime)s %(message)s', level=LOG_LEVEL)
 logging.info('Listening on %s:%s', args.tlf_host, args.tlf_port)
 logging.info('  Sending to %s:%s', args.wt_host, args.wt_port)
+
+mode_dig = 4        # generic digital mode
+if args.rtty:
+    mode_dig = 3    # RTTY
+
+call = args.call.upper()
+operator = ''
+if args.op:
+    operator = args.op.upper()
+
+logging.info('Call: %s%s', call, '  op: '+operator if operator else '')
 
 with socketserver.UDPServer((args.tlf_host, args.tlf_port), TlfUdpHandler) as server:
     # Activate the server; this will keep running until you
