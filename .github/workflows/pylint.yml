@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Analysing the code with pylint
-      uses: kgpl/gh-pylint@v1
+      uses: Silleellie/pylint-github-action@v3
       with:
         package-path: .
         python-version: 3.11
