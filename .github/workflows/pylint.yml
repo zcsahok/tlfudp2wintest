@@ -9,6 +9,6 @@ jobs:
     - name: Analysing the code with pylint
       uses: Silleellie/pylint-github-action@v3
       with:
-        package-path: .
+        lint-path: .
         python-version: 3.11
 
