@@ -39,7 +39,7 @@ def parse_tlf_qso(line):
     result.rst_s = line[46:50].strip()
     result.rst_r = line[51:56].strip()
     result.exchange = line[56:66].strip()
-    result.freq = float(line[83:]) * 1000
+    result.freq = float(line[82:]) * 1000
     result.seq = int(line[25:29])
 
     # fixme: parse time
