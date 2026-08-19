@@ -1,4 +1,4 @@
-![pylint](https://img.shields.io/badge/PyLint-8.96-yellow?logo=python&logoColor=white) 
+![pylint](https://img.shields.io/badge/PyLint-9.15-yellow?logo=python&logoColor=white) 
 
 # TlfUdp2WinTest
 
