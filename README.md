@@ -29,21 +29,29 @@ where 9873 is the default UDP listener port of tlfudp2wintest.
 ### Running the converter
 
 ```
-python3 tlfudp2wintest.py
+python3 tlfudp2wintest.py --call my1call
 ```
 
 ### Options
 
 ```
-python3 tlfudp2wintest.py --help
+$ ./tlfudp2wintest.py --help
+usage: tlfudp2wintest.py [-h] [-d] [--tlf-host HOST] [--tlf-port PORT]
+                         [--wt-host HOST] [--wt-port PORT] [--rtty] --call
+                         CALL [--op OP]
 
+TLF UDP to WinTest converter
+
+options:
   -h, --help       show this help message and exit
   -d, --debug      debug log level
   --tlf-host HOST  TLF node host/IP (default: 127.0.0.1)
   --tlf-port PORT  TLF node port (default: 9873)
   --wt-host HOST   WinTest destination host/IP (default: 127.0.0.1)
   --wt-port PORT   WinTest destination port (default: 9871)
-
+  --rtty           digital mode is RTTY
+  --call CALL      station callsign
+  --op OP          operator callsign or name (default: empty)
 ```
 
 ## Credits
