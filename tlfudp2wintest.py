@@ -148,11 +148,11 @@ def process_args():
 
 args = process_args()
 
-LOG_LEVEL = logging.INFO
+log_level = logging.INFO
 if args.debug:
-    LOG_LEVEL = logging.DEBUG
+    log_level = logging.DEBUG
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=LOG_LEVEL)
+logging.basicConfig(format='%(asctime)s %(message)s', level=log_level)
 logging.info('Listening on %s:%s', args.tlf_host, args.tlf_port)
 logging.info('  Sending to %s:%s', args.wt_host, args.wt_port)
 
